@@ -13,5 +13,6 @@ a.card {
 }
 
 img.card-img-top {
+    object-fit: contain;
     padding: 15px;
 }

@@ -4,7 +4,8 @@ module.exports = (sequelize, DataTypes) => {
   var CurrentSeason = sequelize.define('CurrentSeason', {
     id: {
       type: DataTypes.STRING,
-      primaryKey: true
+      primaryKey: true,
+      unique: true
     },
     name: DataTypes.STRING,
     start_date: DataTypes.DATE,

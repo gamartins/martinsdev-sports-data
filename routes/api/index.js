@@ -19,32 +19,35 @@ router.get('/', function(req, res, next) {
 router.get('/tournaments', (req, res, next) => {
   Tournament.findAll({
     attributes: ['id', 'name' ],
-    include: [
-      Category,
-      CurrentSeason
-      // { model: CurrentSeason, as: 'current_season' },
-      // { model: Category, as: 'category' },
-    ]
+    include: [ Category, CurrentSeason ]
   }).then(data => {
-    if(data.length > 0)
+    if(data.length > 0) {
+      console.log(data.length)
       res.send(data)
+    }
     else {
       axios.default.get(`${apiUrl}/tournaments.${responseFormat}?api_key=${apiKey}`)
       .then(response => {
         const tournaments = response.data.tournaments
       
         tournaments.forEach(tournament => {
-          CurrentSeason.create(tournament.current_season)
-          .then(() => Category.create(tournament.category))
-          .then(() => {
-            Tournament.create({
+          CurrentSeason.findOrCreate({
+            where: { id: tournament.current_season.id },
+            defaults: tournament.current_season
+          })
+          .then(() => Category.findOrCreate({
+            where: { id: tournament.category.id },
+            defaults: tournament.category
+          }))
+          .then(() => Tournament.findOrCreate({
+            where: { id: tournament.id },
+            defaults: {
               id: tournament.id,
               name: tournament.name,
               category: tournament.category.id,
               current_season: tournament.current_season.id
-            })
-          })
-          .catch(error => console.log(error))
+            }
+          }))
         });
       
         res.send(response.data.tournaments)

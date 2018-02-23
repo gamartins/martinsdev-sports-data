@@ -7,7 +7,7 @@ block content
       each tournament in data
         .col-md-3
           a(class='card')
-            img.card-img-top(src="images/league.png")
+            img.card-img-top(src=`images/${tournament.id}.png` onerror="imgError(this, 'sr:tournament:default.png')")
             .card-body
               if tournament.Category.country_code
                 h6.card-text.text-center= `${tournament.name} - ${tournament.Category.country_code}`

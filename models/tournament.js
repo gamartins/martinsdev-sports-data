@@ -4,7 +4,8 @@ module.exports = (sequelize, DataTypes) => {
   const Tournament = sequelize.define('Tournament', {
     id: {
       type: DataTypes.STRING,
-      primaryKey: true
+      primaryKey: true,
+      unique: true
     },
     name: DataTypes.STRING,
   })
