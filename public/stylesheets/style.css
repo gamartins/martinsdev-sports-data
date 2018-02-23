@@ -1,0 +1,17 @@
+body {
+    padding-top: 16px;
+}
+
+.col-md-3 {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+a.card {
+    text-decoration: none;
+    color: inherit;
+}
+
+img.card-img-top {
+    padding: 15px;
+}
