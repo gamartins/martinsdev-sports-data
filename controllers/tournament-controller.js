@@ -11,6 +11,22 @@ apiUrl = 'https://api.sportradar.us/soccer-xt3/eu/en'
 apiKey = 'f3u5exz7c67cn5b55q8muku3'
 responseFormat = 'json'
 
+exports.getTournamentsById = function(id) {
+    return _getTournamentsFromDatabaseById(id)
+}
+
+function _getTournamentsFromDatabaseById(id) {
+    const queryOptions = {
+        where: { id: id },
+        attributes: ['id', 'name' ],
+        include: [ Category, CurrentSeason ]
+    }
+
+    const promise = Tournament.findAll(queryOptions).then(data => Promise.resolve(data[0]));
+
+    return promise
+}
+
 exports.getTournaments = function() {
     const promise = _getTournamentsFromDatabase()
     .then(data => {

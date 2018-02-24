@@ -16,6 +16,7 @@ const responseFormat = 'json'
 
 // Controllers
 const tournamentController = require('../../controllers/tournament-controller')
+const teamController = require('../../controllers/team-controller')
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -32,46 +33,13 @@ router.get('/tournaments', (req, res, next) => {
 })
 
 router.get('/tournaments/:id', (req, res, next) => {
-  Tournament.findAll({ where: { id: req.params.id } })
-  .then(data => {
-    if(data.length == 0)
-      throw new Error('Empty tournament table')
+  const id = req.params.id
 
-    else
-      return Group.findAll({ where: { season_id: data[0].current_season } })
-      .then(groups => {
-        if(groups.length == 0) {
-          axios.default.get(`${apiUrl}/tournaments/${req.params.id}/info.${responseFormat}?api_key=${apiKey}`).then(response => {
-            const season_id = response.data.season.id
-            const groups = response.data.groups
-
-            groups.forEach(group => {
-              Group.create({ name: group.name, season_id: season_id }).then(createdGroup => {
-                group.teams.forEach(team =>
-                Team.findOrCreate({
-                  where: { id: team.id },
-                  defaults: team
-                })
-                .then(createdTeam => GroupTeam.create({ group_id: createdGroup.id, team_id: createdTeam[0].id })))
-              })
-            })
-            
-            res.send(response.data)
-          })
-        } else {
-          const groups_id = []
-          groups.forEach(group => groups_id.push(group.id))
-
-          GroupTeam.findAll({
-            attributes: ['id', 'group_id', 'team_id' ],
-            where: { group_id: groups_id },
-            include: [ Team, Group ]
-          }).then(data => res.send(data))
-        }
-      })
-  })
+  tournamentController.getTournamentsById(id)
+  .then(tournament => teamController.getTeams(tournament.CurrentSeason.id))
+  .then(data => res.send(data))
   .catch(error => {
-    console.log(error.message)
+    console.log(error)
     res.status(500).send(error.message)
   })
 })
