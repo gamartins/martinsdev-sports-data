@@ -1,0 +1,12 @@
+extends layout
+
+block content
+  .container
+    h1= title
+    .row
+      each team in data
+        .col-md-2.card-col
+          a(class='card')
+            img.card-img-top(src=`/images/${team.id}.png` onerror="imgError(this, 'sr:tournament:default.png')")
+            .card-body
+              h6.card-text.text-center= `${team.name}`

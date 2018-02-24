@@ -12,6 +12,14 @@ a.card {
     color: inherit;
 }
 
+.card-col {
+    padding-bottom: 16px;
+}
+
+.card-col h6 {
+    font-size: 0.85vw;
+}
+
 img.card-img-top {
     object-fit: contain;
     padding: 15px;
