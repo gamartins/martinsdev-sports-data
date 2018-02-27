@@ -44,4 +44,18 @@ router.get('/tournaments/:id', (req, res, next) => {
   })
 })
 
+router.get('/tournaments/:tournament_id/team/:team_id', function(req, res, next) {
+  const tournament = req.params.tournament_id
+  const team = req.params.team_id
+  
+  tournamentController.getResults(tournament, team)
+  .then(data => {
+    res.send(data)
+  })
+  .catch(error => {
+    console.log(error)
+    res.status(500).send(error.message)
+  })
+})
+
 module.exports = router;

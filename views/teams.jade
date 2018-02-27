@@ -4,9 +4,9 @@ block content
   .container
     h1= title
     .row
-      each team in data
+      each team in teams
         .col-md-2.card-col
-          a(class='card')
+          a(class='card', href=`/tournaments/${tournament}/team/${team.id}`)
             img.card-img-top(src=`/images/${team.id}.png` onerror="imgError(this, 'sr:tournament:default.png')")
             .card-body
               h6.card-text.text-center= `${team.name}`

@@ -25,6 +25,7 @@ router.get('/tournaments/:id', function(req, res, next) {
   axios.default.get(`${apiUrl}/api/v1/tournaments/${req.params.id}`)
   .then(response => {
     const teams = []
+    const tournament = req.params.id
     
     response.data.forEach(element => {
       const team = element.Team
@@ -33,7 +34,20 @@ router.get('/tournaments/:id', function(req, res, next) {
       teams.push(team)
     });
 
-    res.render('teams', { title: 'Teams', data: teams })
+    res.render('teams', { title: 'Teams', tournament: tournament, teams: teams })
+  })
+  .catch(error => res.send(error))
+})
+
+router.get('/tournaments/:id/team/:team_id', function(req, res, next) {
+  const tournamentId = req.params.id
+  const teamId = req.params.team_id
+  const url = `${apiUrl}/api/v1/tournaments/${tournamentId}/team/${teamId}`
+
+  axios.default.get(url)
+  .then(response => {
+    const lastFiveGames = response.data.slice(0,5)
+    res.render('results', { data: lastFiveGames })
   })
   .catch(error => res.send(error))
 })

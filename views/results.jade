@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  .container
+    h1= 'Results'
+    h4= 'Last Games'
+    ul.list-group
+      each result in data
+        li.list-group-item
+          img(src=`/images/${result.home_team.id}.png` onerror="imgError(this, 'sr:tournament:default.png')")
+          p= `${result.home_team.name} ${result.home_score} x ${result.away_score} ${result.away_team.name}`
+          img(src=`/images/${result.away_team.id}.png` onerror="imgError(this, 'sr:tournament:default.png')")
+    
