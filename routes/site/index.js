@@ -46,8 +46,15 @@ router.get('/tournaments/:id/team/:team_id', function(req, res, next) {
 
   axios.default.get(url)
   .then(response => {
+    const results = response.data;
+
     const lastFiveGames = response.data.slice(0,5)
-    res.render('results', { data: lastFiveGames })
+    const homeGames = results.filter(result => result.home_id == teamId).slice(0,5)
+    const awayGames = results.filter(result => result.away_id == teamId).slice(0,5)
+
+    data = { lastFiveGames, homeGames, awayGames }
+
+    res.render('results', { data: data })
   })
   .catch(error => res.send(error))
 })
