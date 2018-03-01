@@ -6,7 +6,7 @@ block content
     .row
       each team in teams
         .col-md-2.card-col
-          a(class='card', href=`/tournaments/${tournament}/team/${team.id}`)
+          a(class='card', href=`/tournaments/${tournament}/team/${team.id}/last:5/`)
             img.card-img-top(src=`/images/${team.id}.png` onerror="imgError(this, 'sr:tournament:default.png')")
             .card-body
               h6.card-text.text-center= `${team.name}`

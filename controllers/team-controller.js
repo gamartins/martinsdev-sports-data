@@ -77,3 +77,35 @@ function _findGroupTeamData(groups) {
         include: [ Team, Group ]
     })
 }
+
+exports.getStats = function(team, results) {
+    const stats = {
+      match: { won: 0, draw: 0, defeat: 0 },
+      goalsScored: 0,
+      goalsConceded: 0,
+    }
+
+    results.forEach(result => {
+      
+      if(result.home_id == team) {
+        stats.goalsScored += result.home_score
+        stats.goalsConceded += result.away_score
+        
+        if(result.home_score > result.away_score) stats.match.won++
+        if(result.home_score == result.away_score) stats.match.draw++
+        if(result.home_score < result.away_score) stats.match.defeat++
+      }
+
+      else if(result.away_id == team) {
+        stats.goalsScored += result.away_score
+        stats.goalsConceded += result.home_score
+
+        if(result.home_score < result.away_score) stats.match.won++
+        if(result.home_score == result.away_score) stats.match.draw++
+        if(result.home_score > result.away_score) stats.match.defeat++
+      }
+    })
+
+    return stats
+  }
+

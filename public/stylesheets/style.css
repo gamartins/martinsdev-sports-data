@@ -25,19 +25,34 @@ img.card-img-top {
     padding: 15px;
 }
 
-.list-group-item {
+/* ResultsPage */
+.stats .row, .results .row {
+    margin-left: 8px;
+}
+
+.stats .dropdown {
     margin-bottom: 8px;
 }
 
-.list-group-item p {
-    display: inline;
+.results.card {
+    margin: 8px;
+    padding: 0px;
 }
 
-.list-group-item img {
-    width: 25px;
-    height: 25px;
-    margin-right: 8px;
-    margin-left: 8px;
+.results.card-body {
+    padding: 0.8rem;
+}
+
+.results.card-body p {
+    display: inline;
+    font-size: .95vw;
+}
+
+.results.card-body img {
+    width: 22px;
+    height: 22px;
+    margin-right: 5px;
+    margin-left: 5px;
 }
 
 h4 {

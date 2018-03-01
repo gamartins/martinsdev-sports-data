@@ -3,27 +3,39 @@ extends layout
 block content
   .container
     h1= 'Results'
-    h4= 'Last Games'
-    ul.list-group
-      each result in data.lastFiveGames
-        li.list-group-item
-          img(src=`/images/${result.home_team.id}.png` onerror="imgError(this, 'sr:tournament:default.png')")
-          p= `${result.home_team.name} ${result.home_score} x ${result.away_score} ${result.away_team.name}`
-          img(src=`/images/${result.away_team.id}.png` onerror="imgError(this, 'sr:tournament:default.png')")
-    
-    h4= 'Last Home'
-    ul.list-group
-      each result in data.homeGames
-        li.list-group-item
-          img(src=`/images/${result.home_team.id}.png` onerror="imgError(this, 'sr:tournament:default.png')")
-          p= `${result.home_team.name} ${result.home_score} x ${result.away_score} ${result.away_team.name}`
-          img(src=`/images/${result.away_team.id}.png` onerror="imgError(this, 'sr:tournament:default.png')")
-    
-    h4= 'Last Away'
-    ul.list-group
-      each result in data.awayGames
-        li.list-group-item
-          img(src=`/images/${result.home_team.id}.png` onerror="imgError(this, 'sr:tournament:default.png')")
-          p= `${result.home_team.name} ${result.home_score} x ${result.away_score} ${result.away_team.name}`
-          img(src=`/images/${result.away_team.id}.png` onerror="imgError(this, 'sr:tournament:default.png')")
+
+    .stats
+      h3= 'Statistcs'
+      .row
+        .col-md-4
+          h5= `Matches Won: ${data.stats.match.won}`
+        .col-md-4
+          h5= `Matches Draw: ${data.stats.match.draw}`
+        .col-md-4
+          h5= `Matches Defeat: ${data.stats.match.defeat}`
+        .col-md-4
+          h5= `Goals Scored: ${data.stats.goalsScored}`
+        .col-md-4
+          h5= `Goals Conceded: ${data.stats.goalsConceded}`
+        .col-md-4
+          h5= `Goals Average: ${(data.stats.goalsScored + data.stats.goalsConceded)/5}`
+
+    .results
+      h3= 'Last Games'
+      .row
+        each result in data.results
+          .results.card.col-md-2.card-col
+            .results.card-body
+              img(src=`/images/${result.home_team.id}.png` onerror="imgError(this, 'sr:tournament:default.png')")
+              p= `${result.home_team.abbreviation} ${result.home_score} x ${result.away_score} ${result.away_team.abbreviation}`
+              img(src=`/images/${result.away_team.id}.png` onerror="imgError(this, 'sr:tournament:default.png')")
+
+    nav(class="results fixed-bottom", aria-label="...")
+      ul(class="pagination justify-content-center")
+        li(class="page-item")
+          a(class="page-link", href=`/tournaments/${data.tournament}/team/${data.team}/last:5/`) Last 5
+        li(class="page-item")
+          a(class="page-link", href=`/tournaments/${data.tournament}/team/${data.team}/home/`) Home
+        li(class="page-item")
+          a(class="page-link", href=`/tournaments/${data.tournament}/team/${data.team}/away/`) Away
     

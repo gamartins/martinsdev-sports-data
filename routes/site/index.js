@@ -7,6 +7,8 @@ var env = process.env.NODE_ENV || 'development';
 var config = require('../../config/config')[env]
 var apiUrl = config.apiUrl
 
+const teamController = require('../../controllers/team-controller')
+
 router.get('/', function(req, res, next) {
   res.redirect('tournaments')
 });
@@ -39,20 +41,37 @@ router.get('/tournaments/:id', function(req, res, next) {
   .catch(error => res.send(error))
 })
 
-router.get('/tournaments/:id/team/:team_id', function(req, res, next) {
+router.get('/tournaments/:id/team/:team_id/:filter', function(req, res, next) {
+  const filter = req.params.filter
   const tournamentId = req.params.id
   const teamId = req.params.team_id
   const url = `${apiUrl}/api/v1/tournaments/${tournamentId}/team/${teamId}`
-
+  
   axios.default.get(url)
   .then(response => {
     const results = response.data;
 
-    const lastFiveGames = response.data.slice(0,5)
-    const homeGames = results.filter(result => result.home_id == teamId).slice(0,5)
-    const awayGames = results.filter(result => result.away_id == teamId).slice(0,5)
+    const data = {
+      tournament: tournamentId,
+      team: teamId
+    }
+    
+    switch (filter) {
+      case 'home':
+        data.results = results.filter(result => result.home_id == teamId).slice(0,5)
+        data.stats = teamController.getStats(teamId, data.results)
+        break
 
-    data = { lastFiveGames, homeGames, awayGames }
+      case 'away':
+        data.results = results.filter(result => result.away_id == teamId).slice(0,5)
+        data.stats = teamController.getStats(teamId, data.results)
+        break
+    
+      default:
+        data.results = results.slice(0,5)
+        data.stats = teamController.getStats(teamId, data.results)
+        break
+    }
 
     res.render('results', { data: data })
   })
