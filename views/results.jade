@@ -25,7 +25,7 @@ block content
       .row
         each result in data.results
           .results.card.col-md-2.card-col
-            .results.card-body
+            .results.card-body.text-center
               img(src=`/images/${result.home_team.id}.png` onerror="imgError(this, 'sr:tournament:default.png')")
               p= `${result.home_team.abbreviation} ${result.home_score} x ${result.away_score} ${result.away_team.abbreviation}`
               img(src=`/images/${result.away_team.id}.png` onerror="imgError(this, 'sr:tournament:default.png')")
