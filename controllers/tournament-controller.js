@@ -179,3 +179,9 @@ function _saveResultToDatabase(result){
 
     return promise
 }
+
+exports.getSchedule = function(tournament, team) {
+    const url = `${apiUrl}/tournaments/${tournament}/schedule.${responseFormat}?api_key=${apiKey}`
+
+    return axios.default.get(url).then(response => response.data)
+}

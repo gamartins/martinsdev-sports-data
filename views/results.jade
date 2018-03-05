@@ -4,7 +4,7 @@ block content
   .container
     h1= 'Results'
 
-    .stats
+    .stats-block
       h3= 'Statistcs'
       .row
         .col-md-4
@@ -20,9 +20,9 @@ block content
         .col-md-4
           h5= `Goals Average: ${(data.stats.goalsScored + data.stats.goalsConceded)/5}`
 
-    .results
+    .results-block
       h3= 'Last Games'
-      .row
+      .row.justify-content-center
         each result in data.results
           .results.card.col-md-2.card-col
             .results.card-body.text-center
@@ -30,6 +30,16 @@ block content
               p= `${result.home_team.abbreviation} ${result.home_score} x ${result.away_score} ${result.away_team.abbreviation}`
               img(src=`/images/${result.away_team.id}.png` onerror="imgError(this, 'sr:tournament:default.png')")
 
+    .schedules-block
+      h3= 'Next Games'
+      .row.justify-content-center
+        each schedule in data.schedules
+          .results.card.col-md-2.card-col
+            .results.card-body.text-center
+              img(src=`/images/${schedule.competitors[0].id}.png` onerror="imgError(this, 'sr:tournament:default.png')")
+              p= `${schedule.competitors[0].abbreviation} x ${schedule.competitors[1].abbreviation}`
+              img(src=`/images/${schedule.competitors[1].id}.png` onerror="imgError(this, 'sr:tournament:default.png')")
+      
     nav(class="results fixed-bottom", aria-label="...")
       ul(class="pagination justify-content-center")
         li(class="page-item")

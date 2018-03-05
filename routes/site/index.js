@@ -45,16 +45,16 @@ router.get('/tournaments/:id/team/:team_id/:filter', function(req, res, next) {
   const filter = req.params.filter
   const tournamentId = req.params.id
   const teamId = req.params.team_id
-  const url = `${apiUrl}/api/v1/tournaments/${tournamentId}/team/${teamId}`
-  
-  axios.default.get(url)
-  .then(response => {
-    const results = response.data;
+  const teamInfoUrl = `${apiUrl}/api/v1/tournaments/${tournamentId}/team/${teamId}`
+  const teamScheduleUrl = `${apiUrl}/api/v1/tournaments/${tournamentId}/schedule/${teamId}`
 
-    const data = {
-      tournament: tournamentId,
-      team: teamId
-    }
+  const data = {
+    tournament: tournamentId,
+    team: teamId
+  }
+  
+  axios.default.get(teamInfoUrl).then(response => {
+    const results = response.data;
     
     switch (filter) {
       case 'home':
@@ -70,6 +70,35 @@ router.get('/tournaments/:id/team/:team_id/:filter', function(req, res, next) {
       default:
         data.results = results.slice(0,5)
         data.stats = teamController.getStats(teamId, data.results)
+        break
+    }
+
+    return axios.default.get(teamScheduleUrl)
+  }).then(response => {
+    const schedules = response.data.sport_events;
+
+    switch(filter) {
+      case 'home':
+        data.schedules = schedules
+          .filter(schedule => schedule.status == 'not_started' && schedule.competitors[0].id == teamId)
+          .slice(0, 5)
+        break
+      
+      case 'away':
+        data.schedules = schedules
+          .filter(schedule => schedule.status == 'not_started' && schedule.competitors[1].id == teamId)
+          .slice(0,5)
+        break
+
+      default:
+        data.schedules = schedules.filter(schedule => {
+          const condition01 = schedule.status == 'not_started'
+          const condition02 = schedule.competitors[0].id == teamId
+          const condition03 = schedule.competitors[1].id == teamId
+          
+          if (condition01 && (condition02 || condition03)) return true
+          else return false
+        }).slice(0, 5)
         break
     }
 
